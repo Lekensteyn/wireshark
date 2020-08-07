@@ -12,6 +12,9 @@
 
 #include <string.h>
 
+/* Start with G_MESSAGES_DEBUG=reassemble to see messages. */
+#define G_LOG_DOMAIN "reassemble"
+
 #include <epan/packet.h>
 #include <epan/exceptions.h>
 #include <epan/reassemble.h>
@@ -1345,15 +1348,15 @@ fragment_add_common(reassembly_table *table, tvbuff_t *tvb, const int offset,
 
 	fd_head = lookup_fd_head(table, pinfo, id, data, NULL);
 
-#if 0
+#if 1
 	/* debug output of associated fragments. */
 	/* leave it here for future debugging sessions */
-	if(strcmp(pinfo->current_proto, "DCERPC") == 0) {
-		printf("proto:%s num:%u id:%u offset:%u len:%u more:%u visited:%u\n",
+	if(strcmp(pinfo->current_proto, "QUIC") == 0) {
+		g_debug("proto:%s num:%u id:0x%08x offset:%u len:%u more:%u visited:%u",
 			pinfo->current_proto, pinfo->num, id, frag_offset, frag_data_len, more_frags, pinfo->fd->visited);
 		if(fd_head != NULL) {
 			for(fd_item=fd_head->next;fd_item;fd_item=fd_item->next){
-				printf("fd_frame:%u fd_offset:%u len:%u datalen:%u\n",
+				g_debug("fd_frame:%u fd_offset:%u len:%u datalen:%u",
 					fd_item->frame, fd_item->offset, fd_item->len, fd_item->datalen);
 			}
 		}
